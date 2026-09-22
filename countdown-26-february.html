@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="26 Feb">
+<style>
+  :root { color-scheme: light dark; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>26 February Countdown</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #EDEFF2;
+    --surface: #FFFFFF;
+    --ink: #141C25;
+    --muted: #5C6875;
+    --rule: #D2D8DF;
+    --accent: #0E5C6E;
+    --warm: #B4721F;
+    --weekend: #C9D0D8;
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1318;
+      --surface: #171E25;
+      --ink: #E7ECF1;
+      --muted: #96A3B0;
+      --rule: #28323B;
+      --accent: #63C8DA;
+      --warm: #E2A46F;
+      --weekend: #2B343D;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1318;
+    --surface: #171E25;
+    --ink: #E7ECF1;
+    --muted: #96A3B0;
+    --rule: #28323B;
+    --accent: #63C8DA;
+    --warm: #E2A46F;
+    --weekend: #2B343D;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 44px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+
+  .target {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .hero {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding-block: 18px 22px;
+  }
+  .hero-num {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: clamp(76px, 21vw, 132px);
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-bottom: 6px;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 560px) {
+    .tiles { grid-template-columns: 1fr 1fr; }
+  }
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 13px 13px 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tile-val {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .tile--work .tile-val { color: var(--accent); }
+  .tile--off .tile-val { color: var(--warm); }
+  .tile-key {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tile-note { font-size: 11.5px; color: var(--muted); }
+
+  .calendar h2, .removed h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .legend {
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .swatch--work { background: var(--accent); }
+  .swatch--off { background: var(--weekend); }
+  .swatch--hol { background: var(--warm); }
+
+  .months { display: flex; flex-direction: column; gap: 10px; }
+  .month { display: flex; align-items: center; gap: 12px; }
+  .month-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 58px;
+    flex: none;
+  }
+  .cells { display: flex; flex-wrap: wrap; gap: 3px; }
+  .cell { width: 9px; height: 9px; border-radius: 2px; background: var(--weekend); }
+  .cell--work { background: var(--accent); }
+  .cell--hol { background: var(--warm); }
+
+  .removed ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+  .removed li {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    border-bottom: 1px dotted var(--rule);
+    padding-bottom: 5px;
+  }
+  .removed .when {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    color: var(--warm);
+    flex: none;
+    width: 112px;
+  }
+  .removed .what { color: var(--ink); }
+  .removed .count { color: var(--muted); }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  footer b { color: var(--ink); font-weight: 600; }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Counting down to</p>
+    <h1 class="target" id="target-line">26 February</h1>
+  </header>
+
+  <section class="hero" aria-labelledby="days-label">
+    <div class="hero-num" id="days">—</div>
+    <div class="hero-label" id="days-label">days to go</div>
+  </section>
+
+  <section class="tiles">
+    <div class="tile tile--work">
+      <div class="tile-val" id="workdays">—</div>
+      <div class="tile-key">Working days</div>
+      <div class="tile-note">Mon–Fri, net</div>
+    </div>
+    <div class="tile tile--off">
+      <div class="tile-val" id="skipped">—</div>
+      <div class="tile-key">Weekdays off</div>
+      <div class="tile-note">Holidays + break</div>
+    </div>
+    <div class="tile">
+      <div class="tile-val" id="weeks">—</div>
+      <div class="tile-key">Weeks</div>
+      <div class="tile-note">Calendar weeks</div>
+    </div>
+    <div class="tile">
+      <div class="tile-val" id="clock">—</div>
+      <div class="tile-key">Until 6pm</div>
+      <div class="tile-note" id="clock-note">Today</div>
+    </div>
+  </section>
+
+  <section class="calendar">
+    <h2>Every day between now and then</h2>
+    <div class="legend">
+      <span><i class="swatch swatch--work"></i>Working day</span>
+      <span><i class="swatch swatch--hol"></i>Holiday or break</span>
+      <span><i class="swatch swatch--off"></i>Weekend</span>
+    </div>
+    <div class="months" id="months"></div>
+  </section>
+
+  <section class="removed">
+    <h2>Weekdays taken out</h2>
+    <ul id="removed-list"></ul>
+  </section>
+
+  <footer>
+    <div>Counts from tomorrow through <b id="foot-date">26 February</b>, inclusive.</div>
+    <div>Off: Luxembourg legal public holidays (<a href="https://itm.public.lu/fr/questions-reponses/droit-travail/jours-feries-legaux/a/a2.html" target="_blank" rel="noopener">ITM</a>), Chinese National Day and Spring Festival, and 23 December – 3 January.</div>
+    <div>A Chinese holiday landing on a weekend is taken the following Monday.</div>
+    <div>On your phone: open this link and use <b>Add to Home Screen</b> — it opens like an app.</div>
+    <div>After the date passes, the page rolls over to the next 26 February on its own.</div>
+  </footer>
+</div>
+
+<script>
+  var MS_DAY = 86400000;
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var DOW = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+  function dayStart(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function key(d) { return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function isWeekend(d) { var w = d.getDay(); return w === 0 || w === 6; }
+
+  // Weekend holidays are observed on the following Monday.
+  function observed(d) {
+    if (d.getDay() === 6) { return addDays(d, 2); }
+    if (d.getDay() === 0) { return addDays(d, 1); }
+    return d;
+  }
+
+  // Anonymous Gregorian algorithm — Easter Sunday for a given year.
+  function easter(y) {
+    var a = y % 19, b = Math.floor(y / 100), c = y % 100;
+    var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4), k = c % 4;
+    var l = (32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var month = Math.floor((h + l - 7 * m + 114) / 31);
+    var day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(y, month - 1, day);
+  }
+
+  // Chinese New Year, first day of the lunar year (month index, day).
+  var CNY = {
+    2027: [1, 6], 2028: [0, 26], 2029: [1, 13], 2030: [1, 3], 2031: [0, 23],
+    2032: [1, 11], 2033: [0, 31], 2034: [1, 19], 2035: [1, 8]
+  };
+
+  // The 11 Luxembourg legal public holidays, plus the two Chinese dates the desk keeps.
+  function holidays(y) {
+    var e = easter(y);
+    var list = [
+      [new Date(y, 0, 1),   "New Year's Day"],
+      [addDays(e, 1),       "Easter Monday"],
+      [new Date(y, 4, 1),   "Labour Day"],
+      [new Date(y, 4, 9),   "Europe Day"],
+      [addDays(e, 39),      "Ascension Day"],
+      [addDays(e, 50),      "Whit Monday"],
+      [new Date(y, 5, 23),  "Luxembourg National Day"],
+      [new Date(y, 7, 15),  "Assumption"],
+      [new Date(y, 10, 1),  "All Saints' Day"],
+      [new Date(y, 11, 25), "Christmas Day"],
+      [new Date(y, 11, 26), "St Stephen's Day"],
+      [observed(new Date(y, 9, 1)), "Chinese National Day"]
+    ];
+    if (CNY[y]) {
+      list.push([observed(new Date(y, CNY[y][0], CNY[y][1])), "Spring Festival"]);
+    }
+    return list;
+  }
+
+  // 23 December through 3 January.
+  function inYearEndBreak(d) {
+    var m = d.getMonth(), day = d.getDate();
+    return (m === 11 && day >= 23) || (m === 0 && day <= 3);
+  }
+
+  function holidayMap(fromYear, toYear) {
+    var map = {};
+    for (var y = fromYear; y <= toYear; y++) {
+      holidays(y).forEach(function (h) { map[key(h[0])] = h[1]; });
+    }
+    return map;
+  }
+
+  function nextTarget(now) {
+    var t = new Date(now.getFullYear(), 1, 26, 18, 0, 0, 0);
+    if (now >= t) { t = new Date(now.getFullYear() + 1, 1, 26, 18, 0, 0, 0); }
+    return t;
+  }
+
+  var target = nextTarget(new Date());
+  var lastTotal = null;
+
+  function buildCalendar(from, total, hol) {
+    var host = document.getElementById("months");
+    host.textContent = "";
+    var current = null, cells = null;
+    for (var i = 0; i < total; i++) {
+      var d = addDays(from, i);
+      var mk = d.getFullYear() + "-" + d.getMonth();
+      if (mk !== current) {
+        current = mk;
+        var row = document.createElement("div");
+        row.className = "month";
+        var name = document.createElement("div");
+        name.className = "month-name";
+        name.textContent = MONTHS[d.getMonth()].slice(0, 3) + " " + String(d.getFullYear()).slice(2);
+        cells = document.createElement("div");
+        cells.className = "cells";
+        row.appendChild(name);
+        row.appendChild(cells);
+        host.appendChild(row);
+      }
+      var cell = document.createElement("div");
+      var label = DOW[d.getDay()].slice(0, 3) + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3);
+      if (isWeekend(d)) {
+        cell.className = "cell";
+      } else if (hol[key(d)] || inYearEndBreak(d)) {
+        cell.className = "cell cell--hol";
+        label += " — " + (inYearEndBreak(d) ? "year-end break" : hol[key(d)]);
+      } else {
+        cell.className = "cell cell--work";
+      }
+      cell.title = label;
+      cells.appendChild(cell);
+    }
+  }
+
+  function buildRemoved(from, total, hol) {
+    var list = document.getElementById("removed-list");
+    list.textContent = "";
+    var items = [], breakDays = 0, breakFirst = null, breakLast = null;
+
+    for (var i = 0; i < total; i++) {
+      var d = addDays(from, i);
+      if (isWeekend(d)) { continue; }
+      if (inYearEndBreak(d)) {
+        breakDays++;
+        if (!breakFirst) { breakFirst = d; }
+        breakLast = d;
+      } else if (hol[key(d)]) {
+        items.push([
+          DOW[d.getDay()].slice(0, 3) + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3),
+          hol[key(d)],
+          "1 day"
+        ]);
+      }
+    }
+    if (breakDays) {
+      items.push([
+        breakFirst.getDate() + " " + MONTHS[breakFirst.getMonth()].slice(0, 3) +
+          " – " + breakLast.getDate() + " " + MONTHS[breakLast.getMonth()].slice(0, 3),
+        "Year-end break",
+        breakDays + " weekday" + (breakDays === 1 ? "" : "s")
+      ]);
+    }
+    if (!items.length) {
+      items.push(["—", "Nothing to take out", "no holiday falls on a weekday in this stretch"]);
+    }
+    items.forEach(function (it) {
+      var li = document.createElement("li");
+      var when = document.createElement("span");
+      when.className = "when";
+      when.textContent = it[0];
+      var what = document.createElement("span");
+      what.className = "what";
+      what.textContent = it[1];
+      var count = document.createElement("span");
+      count.className = "count";
+      count.textContent = it[2];
+      li.appendChild(when);
+      li.appendChild(what);
+      li.appendChild(count);
+      list.appendChild(li);
+    });
+  }
+
+  function render() {
+    var now = new Date();
+    if (now >= target) { target = nextTarget(now); lastTotal = null; }
+
+    var today = dayStart(now);
+    var tomorrow = addDays(today, 1);
+    var targetDay = dayStart(target);
+    var total = Math.round((targetDay - today) / MS_DAY);
+    var hol = holidayMap(today.getFullYear(), targetDay.getFullYear());
+
+    var work = 0, skipped = 0;
+    for (var i = 0; i < total; i++) {
+      var d = addDays(tomorrow, i);
+      if (isWeekend(d)) { continue; }
+      if (hol[key(d)] || inYearEndBreak(d)) { skipped++; } else { work++; }
+    }
+
+    document.getElementById("days").textContent = total;
+    document.getElementById("workdays").textContent = work;
+    document.getElementById("skipped").textContent = skipped;
+    document.getElementById("weeks").textContent = (total / 7).toFixed(1);
+
+    var six = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 0, 0, 0);
+    var note = "Today";
+    if (now >= six) { six = addDays(six, 1); six.setHours(18, 0, 0, 0); note = "Tomorrow"; }
+    var left = six - now;
+    document.getElementById("clock").textContent =
+      pad(Math.floor(left / 3600000)) + ":" + pad(Math.floor((left % 3600000) / 60000)) + ":" + pad(Math.floor((left % 60000) / 1000));
+    document.getElementById("clock-note").textContent = note;
+
+    if (total !== lastTotal) {
+      lastTotal = total;
+      buildCalendar(tomorrow, total, hol);
+      buildRemoved(tomorrow, total, hol);
+      document.getElementById("target-line").textContent =
+        DOW[targetDay.getDay()] + ", 26 February " + targetDay.getFullYear() + ", 6pm";
+      document.getElementById("foot-date").textContent =
+        DOW[targetDay.getDay()].slice(0, 3) + " 26 February " + targetDay.getFullYear();
+    }
+  }
+
+  render();
+  setInterval(render, 1000);
+</script>
+</body>
+</html>
