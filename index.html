@@ -225,7 +225,7 @@
 <div class="wrap">
   <header>
     <p class="eyebrow">Counting down to</p>
-    <h1 class="target" id="target-line">15 December</h1>
+    <h1 class="target" id="target-line">Tuesday, 15 December 2026, 6pm</h1>
   </header>
 
   <section class="hero" aria-labelledby="days-label">
@@ -272,11 +272,11 @@
   </section>
 
   <footer>
-    <div>Counts from tomorrow through <b id="foot-date">15 December</b>, inclusive.</div>
+    <div>Counts from tomorrow through <b id="foot-date">Tue 15 December 2026</b>, inclusive.</div>
     <div>Off: Luxembourg legal public holidays (<a href="https://itm.public.lu/fr/questions-reponses/droit-travail/jours-feries-legaux/a/a2.html" target="_blank" rel="noopener">ITM</a>), Chinese National Day and Spring Festival, and 23 December – 3 January.</div>
     <div>A Chinese holiday landing on a weekend is taken the following Monday.</div>
     <div>On your phone: open this link and use <b>Add to Home Screen</b> — it opens like an app.</div>
-    <div>After the date passes, the page rolls over to the next 15 December on its own.</div>
+    <div>Fixed target: <b>15 December 2026, 18:00</b>. It does not roll over to another date.</div>
   </footer>
 </div>
 
@@ -354,13 +354,8 @@
     return map;
   }
 
-  function nextTarget(now) {
-    var t = new Date(now.getFullYear(), 1, 26, 18, 0, 0, 0);
-    if (now >= t) { t = new Date(now.getFullYear() + 1, 1, 26, 18, 0, 0, 0); }
-    return t;
-  }
-
-  var target = nextTarget(new Date());
+  // Fixed target: 15 December 2026 at 18:00 local time.
+  var TARGET = new Date(2026, 11, 15, 18, 0, 0, 0);
   var lastTotal = null;
 
   function buildCalendar(from, total, hol) {
@@ -449,12 +444,10 @@
 
   function render() {
     var now = new Date();
-    if (now >= target) { target = nextTarget(now); lastTotal = null; }
-
     var today = dayStart(now);
     var tomorrow = addDays(today, 1);
-    var targetDay = dayStart(target);
-    var total = Math.round((targetDay - today) / MS_DAY);
+    var targetDay = dayStart(TARGET);
+    var total = Math.max(0, Math.round((targetDay - today) / MS_DAY));
     var hol = holidayMap(today.getFullYear(), targetDay.getFullYear());
 
     var work = 0, skipped = 0;
@@ -472,19 +465,16 @@
     var six = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 18, 0, 0, 0);
     var note = "Today";
     if (now >= six) { six = addDays(six, 1); six.setHours(18, 0, 0, 0); note = "Tomorrow"; }
-    var left = six - now;
+    var left = Math.max(0, Math.min(six, TARGET) - now);
     document.getElementById("clock").textContent =
       pad(Math.floor(left / 3600000)) + ":" + pad(Math.floor((left % 3600000) / 60000)) + ":" + pad(Math.floor((left % 60000) / 1000));
-    document.getElementById("clock-note").textContent = note;
+    document.getElementById("clock-note").textContent = now >= TARGET ? "Done" : note;
+    document.getElementById("days-label").textContent = now >= TARGET ? "days — it's here" : "days to go";
 
     if (total !== lastTotal) {
       lastTotal = total;
       buildCalendar(tomorrow, total, hol);
       buildRemoved(tomorrow, total, hol);
-      document.getElementById("target-line").textContent =
-        DOW[targetDay.getDay()] + ", 15 December " + targetDay.getFullYear() + ", 6pm";
-      document.getElementById("foot-date").textContent =
-        DOW[targetDay.getDay()].slice(0, 3) + " 15 December " + targetDay.getFullYear();
     }
   }
 
